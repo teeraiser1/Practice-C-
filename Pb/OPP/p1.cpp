@@ -1,5 +1,7 @@
 #include<iostream>
-#include<cstdlib>
+#include<cstring>
+
+#define NAME_LEN 20
 
 using std::cout;
 using std::cin;
@@ -12,14 +14,58 @@ void Withdrawal(void);
 void ShowAllAccount(void);
 
 
-struct Account{
-	int id;
-	char name[20];
-	int money;
+class Account{
+	int accID;
+	char* cusName;
+	int balance;
+	
+	public:
+	Account(int accID, char* name, int money)
+		:accID(accID), balance(money)
+	{
+		cusName = new char[strlen(name)+1];
+		strcpy(cusName, name);
+		return ;
+	};
+	~Account()
+	{
+		delete(cusName);
+	}
+	int GetAccID()
+	{
+		return this->accID;
+	}
+	int GetBalance()
+	{
+		return this->balance;
+	}
+	char* GetName()
+	{
+		return cusName;
+	}
+	int Withdrawal(int money)
+	{
+		if(money > balance)
+			return 0;
+		balance -= money;
+		return 1;
+	}
+	int Deposit(int money)
+	{
+		balance += money;
+		return 1;
+	}
+	void ShowAccInfo()
+	{
+		cout<<"계좌ID : "<<accID<<endl;
+		cout<<"이름 : "<<cusName<<endl;
+		cout<<"입금액 : "<<balance<<endl<<endl;
+	 return ;
+	}
 };
 
 enum {MAKE = 1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
-static Account account[100];
+static Account* account[100];
 static int accNum = 0;
 
 
@@ -51,6 +97,7 @@ int main(void)
 				cout<<"잘못된 입력입니다."<<endl<<endl;
 		}
 	}
+	delete[](account);
 	return 0;
 }
 
@@ -67,32 +114,32 @@ void ShowMenu(void)
 }
 void OpenAccount(void)
 {
-	Account tmpacc;
+	int accID, balance;
+	char cusName[NAME_LEN];
 	cout<<"----계좌 개설----"<<endl;
 	cout<<"계좌ID : ";
-	cin>>tmpacc.id;
+	cin>>accID;
 	cout<<"이름 : ";
-	cin>>tmpacc.name;
+	cin>>cusName;
 	cout<<"입금액 : ";
-	cin>>tmpacc.money;
-	account[accNum++] = tmpacc;
-	
+	cin>>balance;
+	account[accNum++] = new Account(accID, cusName, balance);
 	return ;
 }
 void Deposit(void)
 {
-	int id, money;
+	int accID, money;
 	cout<<endl<<"-----입 금-----"<<endl;
 	cout<<"계좌ID : ";
-	cin>>id;
+	cin>>accID;
 	cout<<"입금액 : ";
 	cin>>money;
 	
 	for(int i = 0; i < accNum; i++)
 	{
-		if (account[i].id == id)
+		if (account[i]->GetAccID() == accID)
 		{
-			account[i].money += money;
+			account[i]->Deposit(money);
 			cout<<"입금완료"<<endl;
 			break;
 		}
@@ -103,21 +150,20 @@ void Deposit(void)
 }
 void Withdrawal(void)
 {
-	int id, money;
+	int accID, money;
 	cout<<endl<<"-----출 금-----"<<endl;
 	cout<<"계좌ID : ";
-	cin>>id;
+	cin>>accID;
 	cout<<"출금액 : ";
 	cin>>money;
 	
 	for(int i = 0; i < accNum; i++)
 	{
-		if (account[i].id == id && account[i].money >= money)
+		if (account[i]->GetAccID() == accID)
 		{
-			
-			if (account[i].money >= money)
+			if (account[i]->GetBalance() >= money)
 			{
-				account[i].money -= money;
+				account[i]->Withdrawal(money);
 				cout<<"출금완료"<<endl;
 				break;
 			}
@@ -134,8 +180,6 @@ void ShowAllAccount(void)
 	cout<<endl<<"----계좌 출력----"<<endl;
 	for(int i = 0; i < accNum; i++)
 	{
-		cout<<"계좌ID : "<<account[i].id<<endl;
-		cout<<"이름 : "<<account[i].name<<endl;
-		cout<<"입금액 : "<<account[i].money<<endl<<endl;
+		account[i]->ShowAccInfo();
 	}
 }
