@@ -20,7 +20,9 @@ class Account{
 	int balance;
 	
 	public:
-	Account(int accID, char* name, int money)
+	static int accNum;
+	
+	Account(const int accID, const char* name, const int money)
 		:accID(accID), balance(money)
 	{
 		cusName = new char[strlen(name)+1];
@@ -31,31 +33,37 @@ class Account{
 	{
 		delete(cusName);
 	}
-	int GetAccID()
+	Account(const Account& targetAcc)
+		:accID(targetAcc.accID), balance(targetAcc.balance)
+	{
+		cusName = new char[strlen(targetAcc.cusName)+1];
+		strcpy(cusName, targetAcc.cusName);
+	}
+	int GetAccID() const
 	{
 		return this->accID;
 	}
-	int GetBalance()
+	int GetBalance() const
 	{
 		return this->balance;
 	}
-	char* GetName()
+	char* GetName() const
 	{
 		return cusName;
 	}
-	int Withdrawal(int money)
+	int Withdrawal(const int money)
 	{
 		if(money > balance)
 			return 0;
 		balance -= money;
 		return 1;
 	}
-	int Deposit(int money)
+	int Deposit(const int money)
 	{
 		balance += money;
 		return 1;
 	}
-	void ShowAccInfo()
+	void ShowAccInfo() const
 	{
 		cout<<"계좌ID : "<<accID<<endl;
 		cout<<"이름 : "<<cusName<<endl;
@@ -66,7 +74,7 @@ class Account{
 
 enum {MAKE = 1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
 static Account* account[100];
-static int accNum = 0;
+int Account::accNum = 0;
 
 
 int main(void)
@@ -123,7 +131,7 @@ void OpenAccount(void)
 	cin>>cusName;
 	cout<<"입금액 : ";
 	cin>>balance;
-	account[accNum++] = new Account(accID, cusName, balance);
+	account[Account::accNum++] = new Account(accID, cusName, balance);
 	return ;
 }
 void Deposit(void)
@@ -135,7 +143,7 @@ void Deposit(void)
 	cout<<"입금액 : ";
 	cin>>money;
 	
-	for(int i = 0; i < accNum; i++)
+	for(int i = 0; i < Account::accNum; i++)
 	{
 		if (account[i]->GetAccID() == accID)
 		{
@@ -157,7 +165,7 @@ void Withdrawal(void)
 	cout<<"출금액 : ";
 	cin>>money;
 	
-	for(int i = 0; i < accNum; i++)
+	for(int i = 0; i < Account::accNum; i++)
 	{
 		if (account[i]->GetAccID() == accID)
 		{
@@ -178,7 +186,7 @@ void Withdrawal(void)
 void ShowAllAccount(void)
 {
 	cout<<endl<<"----계좌 출력----"<<endl;
-	for(int i = 0; i < accNum; i++)
+	for(int i = 0; i < Account::accNum; i++)
 	{
 		account[i]->ShowAccInfo();
 	}

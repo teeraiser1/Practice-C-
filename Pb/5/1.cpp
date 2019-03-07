@@ -30,18 +30,18 @@ class NameCard
 			strcpy(phoneNum, myPhoneNum);
 		}
 	
-		NameCard(const NameCard *copy)
-			:pos(copy->pos)
+		NameCard(const NameCard& copy)
+			:pos(copy.pos)
 		{
 			int len = strlen(name) + 1;
 			name = new char[len];
-			strcpy(name, copy->name);
+			strcpy(name, copy.name);
 			len = strlen(compName) + 1;
 			compName = new char[len];
-			strcpy(compName, copy->compName);
+			strcpy(compName, copy.compName);
 			len = strlen(phoneNum) + 1;
 			phoneNum = new char[len];
-			strcpy(phoneNum, copy->phoneNum);
+			strcpy(phoneNum, copy.phoneNum);
 		}
 		void ShowNameCardInfo()
 		{
