@@ -1,13 +1,15 @@
 #include<iostream>
 #include<cstring>
-#include"BankingSystem.h"
 
+#include"Account.h"
+#include"NormalAccount.h"
+#include"HighCreditAccount.h"
+#include"AccountHandler.h"
+#include"BankingCommonDec1.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
-
-enum {MAKE = 1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
 
 int main(void)
 {
