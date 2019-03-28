@@ -1,10 +1,12 @@
 #ifndef __ACCOUNT_H__
 #define __ACCOUNT_H__
 
+#include"String.h"
+
 class Account{
 	private:
 		int accID;
-		char* cusName;
+		String cusName;
 		int balance;
 	public:
 	Account(const int accID, const char* name, const int money);
@@ -16,5 +18,6 @@ class Account{
 	int Withdrawal(const int money);
 	virtual int Deposit(const int money) = 0;
 	virtual void ShowAccInfo() const = 0;
+	Account& operator=(const Account& acc);
 };
 #endif

@@ -7,20 +7,16 @@ using std::endl;
 Account::Account(const int accID, const char* name, const int money)
 	:accID(accID), balance(money)
 {
-	cusName = new char[strlen(name)+1];
-	strcpy(cusName, name);
+	cusName = name;
 	return ;
 };
 Account::Account(const Account& targetAcc)
 	:accID(targetAcc.accID), balance(targetAcc.balance)
 {
-	cusName = new char[strlen(targetAcc.cusName)+1];
-	strcpy(cusName, targetAcc.cusName);
+	cusName = targetAcc.cusName;
 }
 Account::~Account()
-{
-	delete(cusName);
-}
+{   }
 int Account::GetAccID() const
 {
 	return this->accID;
@@ -31,7 +27,7 @@ int Account::GetBalance() const
 }
 char* Account::GetName() const
 {
-	return cusName;
+	return cusName.GetString();
 }
 int Account::Withdrawal(const int money)
 {
@@ -48,8 +44,15 @@ int Account::Deposit(const int money)
 void Account::ShowAccInfo() const
 {
 	cout<<"계좌ID : "<<accID<<endl;
-	cout<<"이름 : "<<cusName<<endl;
+	cout<<"이름 : "<<cusName.GetString()<<endl;
 	cout<<"입금액 : "<<balance<<endl;
  return ;
+}
+Account& Account::operator=(const Account& acc)
+{
+	this->accID = acc.accID;
+	this->balance = acc.balance;
+	this->cusName = acc.cusName;
+	return *this;
 }
 
