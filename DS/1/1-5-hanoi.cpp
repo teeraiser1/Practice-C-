@@ -2,7 +2,7 @@
 #include<unistd.h>
 
 #define MAX_HEIGHT 32
-#define HANOI_TARGET_HEIGHT 5
+#define HANOI_TARGET_HEIGHT 7
 #define NO_ELEMENT -1
 #define WAITING_TIME 1000000
 
